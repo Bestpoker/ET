@@ -606,10 +606,12 @@ PlayerSettings:
   webGLCompressionFormat: 1
   webGLLinkerTarget: 0
   scriptingDefineSymbols:
-    1: NET45
-    4: NET45
-    7: NET45;ILRuntime
+    1: NET45;CROSS_PLATFORM_INPUT
+    4: NET45;CROSS_PLATFORM_INPUT;MOBILE_INPUT
+    7: NET45
     13: NET45;ILRuntime
+    14: MOBILE_INPUT
+    17: MOBILE_INPUT
   platformArchitecture:
     iOS: 2
   scriptingBackend:

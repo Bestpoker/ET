@@ -19,11 +19,6 @@ namespace ETModel
 		Accept,
 	}
 
-	public class UserTokenInfo
-	{
-		public long InstanceId;
-	}
-
 	public abstract class AChannel: ComponentWithId
 	{
 		public ChannelType ChannelType { get; }
@@ -96,6 +91,8 @@ namespace ETModel
 			base.Dispose();
 
 			this.service.Remove(this.Id);
-		}
+
+            this.OnError((int)System.Net.Sockets.SocketError.Disconnecting);
+        }
 	}
 }

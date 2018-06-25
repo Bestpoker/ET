@@ -9,10 +9,11 @@ namespace ETHotfix
 		protected override void Run(ETModel.Session session, Actor_CreateUnits message)
 		{
 			// 加载Unit资源
-			ResourcesComponent resourcesComponent = ETModel.Game.Scene.GetComponent<ResourcesComponent>();
-			resourcesComponent.LoadBundle($"Unit.unity3d");
 			
-			UnitComponent unitComponent = ETModel.Game.Scene.GetComponent<UnitComponent>();
+            //resourcesComponent.LoadBundle($"Unit.unity3d");
+            
+
+            UnitComponent unitComponent = ETModel.Game.Scene.GetComponent<UnitComponent>();
 			
 			foreach (UnitInfo unitInfo in message.Units)
 			{
@@ -20,17 +21,34 @@ namespace ETHotfix
 				{
 					continue;
 				}
-				Unit unit = UnitFactory.Create(unitInfo.UnitId);
-				unit.Position = new Vector3(unitInfo.X / 1000f, 0, unitInfo.Z / 1000f);
+                //Unit unit = UnitFactory.Create(unitInfo.UnitId);
+                Unit unit = ETModel.ComponentFactory.CreateWithId<Unit>(unitInfo.UnitId);
+
+                ResourcesComponent resourcesComponent = ETModel.Game.Scene.GetComponent<ResourcesComponent>();
+                resourcesComponent.LoadBundle($"Player.unity3d");
+
+                GameObject prefab = resourcesComponent.GetAsset("Player.unity3d", "Player") as GameObject;
+                unit.GameObject = UnityEngine.Object.Instantiate(prefab);
+
+                resourcesComponent.UnloadBundle($"Player.unity3d");
+
+                unitComponent.Add(unit);
+                GameObject parent = GameObject.Find($"/Global/Unit");
+                unit.GameObject.transform.SetParent(parent.transform, false);
+
+                unit.Position = new Vector3(unitInfo.X / 1000f, 0, unitInfo.Z / 1000f);
 				unit.IntPos = new VInt3(unitInfo.X, 0, unitInfo.Z);
 
 				if (PlayerComponent.Instance.MyPlayer.UnitId == unit.Id)
 				{
-					ETModel.Game.Scene.GetComponent<CameraComponent>().Unit = unit;
-				}
+                    //ETModel.Game.Scene.GetComponent<CameraComponent>().Unit = unit;
+                    Game.Scene.AddComponent<TankControllerComponent, Unit>(unit);
+
+                }
 			}
 
-			Game.Scene.AddComponent<OperaComponent>();
+			//Game.Scene.AddComponent<OperaComponent>();
+
 		}
 	}
 }

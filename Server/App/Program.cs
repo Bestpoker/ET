@@ -77,7 +77,7 @@ namespace App
 						Game.Scene.AddComponent<LocationProxyComponent>();
 						Game.Scene.AddComponent<ActorMessageSenderComponent>();
 						Game.Scene.AddComponent<ActorMessageDispatherComponent>();
-						Game.Scene.AddComponent<ServerFrameComponent>();
+						//Game.Scene.AddComponent<ServerFrameComponent>();
 						break;
 					case AppType.AllServer:
 						Game.Scene.AddComponent<ActorMessageSenderComponent>();
@@ -95,7 +95,7 @@ namespace App
 						Game.Scene.AddComponent<RealmGateAddressComponent>();
 						Game.Scene.AddComponent<GateSessionKeyComponent>();
 						Game.Scene.AddComponent<ConfigComponent>();
-						Game.Scene.AddComponent<ServerFrameComponent>();
+						//Game.Scene.AddComponent<ServerFrameComponent>();
 						// Game.Scene.AddComponent<HttpComponent>();
 						break;
 					case AppType.Benchmark:

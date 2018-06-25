@@ -11,10 +11,10 @@ namespace ETHotfix
 			foreach (Unit unit in units)
 			{
 				UnitGateComponent unitGateComponent = unit.GetComponent<UnitGateComponent>();
-				if (unitGateComponent.IsDisconnect)
-				{
-					continue;
-				}
+				//if (unitGateComponent.IsDisconnect)
+				//{
+				//	continue;
+				//}
 				
 				actorMessageSenderComponent.GetWithActorId(unitGateComponent.GateSessionActorId).Send(message);
 			}

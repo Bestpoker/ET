@@ -39,11 +39,11 @@ namespace ETModel
 			this.Error = 0;
 			this.channel = aChannel;
 			this.requestCallback.Clear();
-			
+			long id = this.Id;
 			channel.ErrorCallback += (c, e) =>
 			{
 				this.Error = e;
-				this.Network.Remove(this.Id); 
+				this.Network.Remove(id); 
 			};
 			channel.ReadCallback += this.OnRead;
 			
@@ -62,7 +62,7 @@ namespace ETModel
 			
 			foreach (Action<IResponse> action in this.requestCallback.Values.ToArray())
 			{
-				action.Invoke(new ResponseMessage { Error = ErrorCode.ERR_SessionDispose });
+				action.Invoke(new ResponseMessage { Error = this.Error });
 			}
 			
 			this.Error = 0;
@@ -160,7 +160,7 @@ namespace ETModel
 			{
 				try
 				{
-					if (response.Error > ErrorCode.ERR_Exception)
+					if (ErrorCode.IsRpcNeedThrowException(response.Error))
 					{
 						throw new RpcException(response.Error, response.Message);
 					}
@@ -187,7 +187,7 @@ namespace ETModel
 			{
 				try
 				{
-					if (response.Error > ErrorCode.ERR_Exception)
+					if (ErrorCode.IsRpcNeedThrowException(response.Error))
 					{
 						throw new RpcException(response.Error, response.Message);
 					}

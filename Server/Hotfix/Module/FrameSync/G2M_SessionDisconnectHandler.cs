@@ -9,7 +9,8 @@ namespace ETHotfix
 		protected override async Task Run(Unit unit, G2M_SessionDisconnect message)
 		{
 			unit.GetComponent<UnitGateComponent>().IsDisconnect = true;
-			await Task.CompletedTask;
+            Game.Scene.GetComponent<UnitComponent>().Remove(unit.Id);
+            await Task.CompletedTask;
 		}
 	}
 }

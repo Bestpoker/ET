@@ -9,10 +9,14 @@ namespace ETModel
 	{
 		public override void Update(SceneChangeComponent self)
 		{
-			if (self.loadMapOperation.isDone)
-			{
-				self.tcs.SetResult(true);
-			}
+            if (self.loadMapOperation != null)
+            {
+                if (self.loadMapOperation.isDone)
+                {
+                    self.tcs.SetResult(true);
+                    self.loadMapOperation = null;
+                }
+            }
 		}
 	}
 

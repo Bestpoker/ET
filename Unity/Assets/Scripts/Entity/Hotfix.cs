@@ -39,12 +39,10 @@ namespace ETModel
 #if ILRuntime
 			if (this.appDomain == null)
 			{
-                //return new Type[0];
-                return new List<Type>();
-            }
+				return new List<Type>();
+			}
 
-            //return this.appDomain.LoadedTypes.Values.Select(x => x.ReflectionType);
-            return this.appDomain.LoadedTypes.Values.Select(x => x.ReflectionType).ToList();
+			return this.appDomain.LoadedTypes.Values.Select(x => x.ReflectionType).ToList();
 #else
 			if (this.assembly == null)
 			{
@@ -52,7 +50,7 @@ namespace ETModel
 			}
 			return this.assembly.GetTypes().ToList();
 #endif
-        }
+		}
 
 
 		public void LoadHotfixAssembly()

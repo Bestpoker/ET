@@ -21,13 +21,15 @@ namespace ETHotfix
 				response.Count = Game.Scene.GetComponent<UnitComponent>().Count;
 				reply(response);
 
-				if (response.Count == 2)
+				//if (response.Count == 2)
 				{
 					Actor_CreateUnits actorCreateUnits = new Actor_CreateUnits();
 					Unit[] units = Game.Scene.GetComponent<UnitComponent>().GetAll();
 					foreach (Unit u in units)
 					{
-						actorCreateUnits.Units.Add(new UnitInfo() {UnitId = u.Id, X = (int)(u.Position.X * 1000), Z = (int)(u.Position.Z * 1000) });
+                        //u.Position = new System.Numerics.Vector3(2000, 0, 1500);
+
+                        actorCreateUnits.Units.Add(new UnitInfo() {UnitId = u.Id, X = (int)(u.Position.X * 1000), Z = (int)(u.Position.Z * 1000) });
 					}
 					MessageHelper.Broadcast(actorCreateUnits);
 				}

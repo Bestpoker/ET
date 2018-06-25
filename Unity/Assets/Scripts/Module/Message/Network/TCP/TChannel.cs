@@ -31,8 +31,6 @@ namespace ETModel
 			this.parser = new PacketParser(this.recvBuffer);
 			this.innArgs.Completed += this.OnComplete;
 			this.outArgs.Completed += this.OnComplete;
-			this.innArgs.UserToken = new UserTokenInfo() { InstanceId = this.InstanceId };
-			this.outArgs.UserToken = new UserTokenInfo() { InstanceId = this.InstanceId };
 
 			this.RemoteAddress = ipEndPoint;
 		}
@@ -44,8 +42,6 @@ namespace ETModel
 			this.parser = new PacketParser(this.recvBuffer);
 			this.innArgs.Completed += this.OnComplete;
 			this.outArgs.Completed += this.OnComplete;
-			this.innArgs.UserToken = new UserTokenInfo() { InstanceId = this.InstanceId };
-			this.outArgs.UserToken = new UserTokenInfo() { InstanceId = this.InstanceId };
 
 			this.RemoteAddress = (IPEndPoint)socket.RemoteEndPoint;
 			
@@ -76,6 +72,7 @@ namespace ETModel
 				this.ConnectAsync(this.RemoteAddress);
 				return;
 			}
+			
 			this.StartRecv();
 			this.StartSend();
 		}
@@ -147,18 +144,12 @@ namespace ETModel
 
 		private void OnConnectComplete(object o)
 		{
-			if (this.IsDisposed)
+			if (this.socket == null)
 			{
-				throw new Exception("TChannel已经被Dispose, 不能发送消息");
-			}
-			SocketAsyncEventArgs e = (SocketAsyncEventArgs) o;
-			UserTokenInfo userTokenInfo = (UserTokenInfo) e.UserToken;
-			if (userTokenInfo.InstanceId != this.InstanceId)
-			{
-				Log.Error($"session disposed!");
 				return;
 			}
-
+			SocketAsyncEventArgs e = (SocketAsyncEventArgs) o;
+			
 			if (e.SocketError != SocketError.Success)
 			{
 				this.OnError((int)e.SocketError);	
@@ -203,17 +194,11 @@ namespace ETModel
 
 		private void OnRecvComplete(object o)
 		{
-			if (this.IsDisposed)
+			if (this.socket == null)
 			{
-				throw new Exception("TChannel已经被Dispose, 不能发送消息");
-			}
-			SocketAsyncEventArgs e = (SocketAsyncEventArgs)o;
-			UserTokenInfo userTokenInfo = (UserTokenInfo) e.UserToken;
-			if (userTokenInfo.InstanceId != this.InstanceId)
-			{
-				Log.Error($"session disposed!");
 				return;
 			}
+			SocketAsyncEventArgs e = (SocketAsyncEventArgs) o;
 
 			if (e.SocketError != SocketError.Success)
 			{
@@ -253,10 +238,11 @@ namespace ETModel
 				}
 			}
 
-			if (userTokenInfo.InstanceId != this.InstanceId)
+			if (this.socket == null)
 			{
 				return;
 			}
+			
 			this.StartRecv();
 		}
 
@@ -299,17 +285,11 @@ namespace ETModel
 
 		private void OnSendComplete(object o)
 		{
-			if (this.IsDisposed)
+			if (this.socket == null)
 			{
-				throw new Exception("TChannel已经被Dispose, 不能发送消息");
-			}
-			SocketAsyncEventArgs e = (SocketAsyncEventArgs)o;
-			UserTokenInfo userTokenInfo = (UserTokenInfo) e.UserToken;
-			if (userTokenInfo.InstanceId != this.InstanceId)
-			{
-				Log.Error($"session disposed!");
 				return;
 			}
+			SocketAsyncEventArgs e = (SocketAsyncEventArgs) o;
 
 			if (e.SocketError != SocketError.Success)
 			{
